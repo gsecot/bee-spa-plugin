@@ -9,5 +9,6 @@
 ## How to start
 
 1. yarn install
-2. yarn start (for dev mode)
-3. yarn build (to build static production files)
+2. yarn server (to start auth server on port :5000)
+3. yarn start (for react dev mode on port :8080)
+4. yarn build (to build react static production files - server still required on port :5000)
