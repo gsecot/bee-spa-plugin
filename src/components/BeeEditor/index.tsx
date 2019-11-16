@@ -1,7 +1,8 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuthToken } from 'app/utils/auth'
 import { useTemplate } from 'app/utils/template'
-import { StyledEditor } from './styled'
+import { StyledBeeEditor, Container } from './styled'
+import { CustomActions } from './CustomActions'
 
 interface Props {
   containerID: string
@@ -26,16 +27,26 @@ export const BeeEditor: React.FC<Props> = ({
   // Preparing empty bee instance to be filled during plugin initialization
   const [beeInstance, setBeeInstace] = useState<Bee>()
 
-  // Config file for Bee Editor
+  // internal state for external custom actions
+  const [isGeneratingHtml, setIsGeneratingHtml] = useState(false)
+  const [isGeneratingJson, setIsGeneratingJson] = useState(false)
+  const [isPreviewMode, setPreviewMode] = useState(false)
+
+  // Config file for Bee Editor (including callbacks for events)
   const config = {
     uid: 'test-user',
     container: containerID,
     language: 'it-IT',
     onSaveAsTemplate: (jsonFile: FileJSON) => {
       onSaveJson(jsonFile)
+      setIsGeneratingJson(false)
     },
     onSend: (htmlFile: FileHTML) => {
       onSaveHtml(htmlFile)
+      setIsGeneratingHtml(false)
+    },
+    onTogglePreview: (state: boolean) => {
+      setPreviewMode(state)
     },
   }
 
@@ -49,34 +60,34 @@ export const BeeEditor: React.FC<Props> = ({
   }, [jwtToken, defaultTemplate])
 
   // if beeInstace exists, we can start it
-  if (beeInstance && beeInstance.start) {
-    beeInstance.start(defaultTemplate)
-  }
+  useEffect(() => {
+    if (beeInstance && beeInstance.start) {
+      beeInstance.start(defaultTemplate)
+    }
+  }, [beeInstance])
 
+  const editorIsLoading = !(beeInstance && beeInstance.save)
   return (
-    <Fragment>
-      {beeInstance && beeInstance.save ? (
-        <div>
-          <button
-            onClick={() => {
-              beeInstance.send()
-            }}
-          >
-            SAVE HTML
-          </button>
-          <button
-            onClick={() => {
-              beeInstance.saveAsTemplate()
-            }}
-          >
-            EXPORT JSON
-          </button>
-        </div>
-      ) : (
-        <div>Loading Bee...</div>
-      )}
-      <StyledEditor id={containerID}></StyledEditor>
-    </Fragment>
+    <Container>
+      <CustomActions
+        editorIsLoading={editorIsLoading}
+        saveHtmlIsEnabled={!isGeneratingHtml}
+        saveJsonIsEnabled={!isGeneratingJson}
+        isPreviewMode={isPreviewMode}
+        onSaveHtmlCallback={() => {
+          setIsGeneratingHtml(true)
+          beeInstance.send()
+        }}
+        onSaveJsonCallback={() => {
+          setIsGeneratingJson(true)
+          beeInstance.saveAsTemplate()
+        }}
+        onPreviewCallback={() => {
+          beeInstance.togglePreview()
+        }}
+      />
+      <StyledBeeEditor id={containerID}></StyledBeeEditor>
+    </Container>
   )
 }
 
