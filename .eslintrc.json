@@ -1,0 +1,55 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "standard",
+    "plugin:@typescript-eslint/eslint-recommended",
+    // "plugin:@typescript-eslint/recommended",
+    // "plugin:prettier/recommended"
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": ["react", "prettier", "@typescript-eslint", "functional"],
+  "rules": {
+    "prettier/prettier": "warn",
+    "react/prop-types": "off",
+    "no-var": "error",
+    "no-param-reassign": "error",
+    "prefer-const": "error",
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/camelcase": "error",
+    "@typescript-eslint/prefer-readonly": "error",
+    "functional/immutable-data": "error",
+    "functional/no-let": "error",
+    "functional/prefer-readonly-type": [
+      "error",
+      { "allowMutableReturnType": true, "ignoreInterface": true }
+    ],
+    "functional/no-class": "error",
+    "functional/no-this-expression": "error",
+    "functional/no-expression-statement": "off",
+    "functional/no-loop-statement": "error"
+  }
+}
