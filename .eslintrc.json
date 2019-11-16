@@ -40,9 +40,7 @@
     "prefer-const": "error",
     "@typescript-eslint/member-delimiter-style": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    // "@typescript-eslint/camelcase": "error",
     "@typescript-eslint/prefer-readonly": "error",
-    // "functional/immutable-data": "error",
     "functional/no-let": "error",
     "functional/prefer-readonly-type": [
       "error",
